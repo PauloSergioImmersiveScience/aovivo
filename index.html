@@ -10,19 +10,24 @@
     <!-- Vídeo em fullscreen -->
     <video id="camera" autoplay playsinline muted></video>
 
+    <!-- Etiqueta mostrando qual câmera está ativa -->
+    <div id="cameraLabel">📷 Câmera: Frontal</div>
+
     <!-- Botão para trocar a câmera -->
     <div class="controls">
-        <button id="toggleCamera">Trocar câmera</button>
+        <button id="toggleCamera">🔄 Trocar câmera</button>
     </div>
 
     <script>
-        let currentFacingMode = "user";  // padrão: câmera frontal
+        let currentFacingMode = "user";  // padrão: frontal
         let currentStream = null;
+
+        const label = document.getElementById("cameraLabel");
 
         async function startCamera(facingMode = "user") {
             const video = document.getElementById('camera');
 
-            // Se já existe um stream ativo, para todas as tracks antes de criar outro
+            // Para o stream atual antes de iniciar o novo
             if (currentStream) {
                 currentStream.getTracks().forEach(track => track.stop());
                 currentStream = null;
@@ -37,6 +42,13 @@
                 currentStream = stream;
                 video.srcObject = stream;
                 currentFacingMode = facingMode;
+
+                // Atualizar o texto da câmera ativa
+                label.textContent =
+                    facingMode === "user"
+                    ? "📷 Câmera: Frontal"
+                    : "📷 Câmera: Traseira";
+
             } catch (err) {
                 console.error("Erro ao acessar a câmera:", err);
                 alert("Não foi possível acessar a câmera: " + err.message);
