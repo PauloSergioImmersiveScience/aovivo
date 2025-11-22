@@ -2,32 +2,56 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Câmera Fullscreen</title>
+    <title>Câmera Fullscreen com Troca</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- O vídeo ocupa toda a tela -->
+    <!-- Vídeo em fullscreen -->
     <video id="camera" autoplay playsinline muted></video>
 
+    <!-- Botão para trocar a câmera -->
+    <div class="controls">
+        <button id="toggleCamera">Trocar câmera</button>
+    </div>
+
     <script>
-        async function startCamera() {
+        let currentFacingMode = "user";  // padrão: câmera frontal
+        let currentStream = null;
+
+        async function startCamera(facingMode = "user") {
             const video = document.getElementById('camera');
+
+            // Se já existe um stream ativo, para todas as tracks antes de criar outro
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
 
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: "environment" }, // traseira em celulares
+                    video: { facingMode: facingMode },
                     audio: false
                 });
 
+                currentStream = stream;
                 video.srcObject = stream;
+                currentFacingMode = facingMode;
             } catch (err) {
                 console.error("Erro ao acessar a câmera:", err);
-                alert("Não foi possível acessar a câmera");
+                alert("Não foi possível acessar a câmera: " + err.message);
             }
         }
 
-        startCamera();
+        function toggleCamera() {
+            const newMode = currentFacingMode === "user" ? "environment" : "user";
+            startCamera(newMode);
+        }
+
+        document.getElementById('toggleCamera').addEventListener('click', toggleCamera);
+
+        // Inicia com a câmera FRONTAL
+        startCamera("user");
     </script>
 
 </body>

@@ -1,14 +1,14 @@
-/* Remove margens e faz o body ocupar 100% da tela */
+/* Tela cheia, sem scroll */
 html, body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;  /* impede scroll */
+    overflow: hidden;
     background: black;
 }
 
-/* O vídeo ocupa 100% da janela */
+/* Vídeo ocupa 100% da tela */
 video {
     position: absolute;
     top: 0;
@@ -17,6 +17,33 @@ video {
     width: 100%;
     height: 100%;
 
-    object-fit: cover;  /* recorta mantendo proporção */
+    object-fit: cover;  /* preenche sem distorcer */
     background: black;
+}
+
+/* Container dos controles (botão) */
+.controls {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 10;  /* fica por cima do vídeo */
+}
+
+/* Estilo do botão */
+.controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.9);
+    color: #111;
+    font-weight: bold;
+}
+
+/* Toque visual ao clicar */
+.controls button:active {
+    transform: scale(0.97);
 }
