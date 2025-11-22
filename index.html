@@ -1,67 +1,34 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Treino – Ginástica com Câmera</title>
+    <title>Câmera Fullscreen</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Treino – Ginástica (Câmera ao vivo)</h1>
-        <p>Captura direta da webcam</p>
-    </header>
 
-    <main>
-        <section class="video-section">
-            <h2>Imagem da câmera</h2>
-
-            <!-- Agora o vídeo NÃO usa src, ele vai receber o stream da câmera -->
-            <video 
-                id="camera"
-                autoplay 
-                playsinline 
-                muted 
-                width="800">
-            </video>
-
-            <p id="status"></p>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 – Prof. Paulo Sergio Rodrigues</p>
-    </footer>
+    <!-- O vídeo ocupa toda a tela -->
+    <video id="camera" autoplay playsinline muted></video>
 
     <script>
         async function startCamera() {
-            const status = document.getElementById('status');
             const video = document.getElementById('camera');
 
-            // Verifica se o browser suporta a API
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                status.textContent = 'Seu navegador não suporta acesso à câmera.';
-                return;
-            }
-
             try {
-                // Pede acesso só ao vídeo (sem áudio)
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: true,
+                    video: { facingMode: "environment" }, // traseira em celulares
                     audio: false
                 });
 
-                // Liga o stream no elemento <video>
                 video.srcObject = stream;
-                status.textContent = '';
             } catch (err) {
-                console.error(err);
-                status.textContent = 'Não foi possível acessar a câmera: ' + err.message;
+                console.error("Erro ao acessar a câmera:", err);
+                alert("Não foi possível acessar a câmera");
             }
         }
 
-        // Inicia automaticamente ao carregar a página
         startCamera();
     </script>
+
 </body>
 </html>
